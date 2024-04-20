@@ -37,6 +37,7 @@ public:
         arr[last] = val;
         size++;
     }
+
     void push_front(T val) {
         if (isFull()) {
             cout << "List is full" << endl;
@@ -50,6 +51,7 @@ public:
         arr[first] = val;
         size++;
     }
+
     void push_at_position(int position, T val) {
         if (isFull()) {
             cout << "List is full" << endl;
@@ -164,6 +166,45 @@ public:
     int Size() {
         return size;
     }
+
+    T retrieveAt(int index) {
+        if (index < 0 || index >= size) {
+            throw out_of_range("Invalid index");
+        }
+        return arr[(first + index) % capacity];
+    }
+
+    void replaceAt(T newElement, int index) {
+        if (index < 0 || index >= size) {
+            throw out_of_range("Invalid index");
+        }
+        arr[(first + index) % capacity] = newElement;
+    }
+
+    bool isExist(T element) {
+        for (int i = first; i != (last + 1) % capacity; i = (i + 1) % capacity) {
+            if (arr[i] == element) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isItemAtEqual(T element, int index) {
+        if (index < 0 || index >= size) {
+            throw out_of_range("Invalid index");
+        }
+        return arr[(first + index) % capacity] == element;
+    }
+
+    void swap(int firstItemIdx, int secondItemIdx) {
+        if (firstItemIdx < 0 || firstItemIdx >= size || secondItemIdx < 0 || secondItemIdx >= size) {
+            throw out_of_range("Invalid index");
+        }
+        T temp = arr[(first + firstItemIdx) % capacity];
+        arr[(first + firstItemIdx) % capacity] = arr[(first + secondItemIdx) % capacity];
+        arr[(first + secondItemIdx) % capacity] = temp;
+    }
 };
 
 
@@ -173,7 +214,9 @@ int main() {
     while (true) {
         cout << "\nMenu:\n1. Insert element at end\n2. Delete element from end\n3. Insert element at beginning\n"
                 "4. Delete element from beginning\n5. Insert element at certain position\n6. Delete element from certain position\n"
-                "7. Print first element\n8. Print last\n9. Print list\n10. Clear list\n11. Print size of list\n12. Exit Program.\nEnter your choice: " << endl;
+                "7. Print first element\n8. Print last\n9. Print list\n10. Clear list\n11. Print size of list\n"
+                "12. Retrieve element at index\n13. Replace element at index\n14. Check if element exists\n"
+                "15. Check if item at index is equal to element\n16. Swap two elements by index\n17. Exit Program.\nEnter your choice: " << endl;
         cin >> choice;
         switch (choice) {
             case 1:
@@ -240,6 +283,63 @@ int main() {
                 cout << "Size of the list: " << list.Size() << endl;
                 break;
             case 12:
+                cout << "Enter index to retrieve element: ";
+                cin >> position;
+                try {
+                    cout << "Element at index " << position << ": " << list.retrieveAt(position) << endl;
+                } catch (const out_of_range& e) {
+                    cout << e.what() << endl;
+                }
+                break;
+            case 13:
+                cout << "Enter index to replace element: ";
+                cin >> position;
+                cout << "Enter new element value: ";
+                cin >> value;
+                try {
+                    list.replaceAt(value, position);
+                    cout << "Element replaced successfully" << endl;
+                } catch (const out_of_range& e) {
+                    cout << e.what() << endl;
+                }
+                break;
+            case 14:
+                cout << "Enter element to check if it exists: ";
+                cin >> value;
+                if (list.isExist(value)) {
+                    cout << "Element exists in the list" << endl;
+                } else {
+                    cout << "Element does not exist in the list" << endl;
+                }
+                break;
+            case 15:
+                cout << "Enter element to compare: ";
+                cin >> value;
+                cout << "Enter index to compare with: ";
+                cin >> position;
+                try {
+                    if (list.isItemAtEqual(value, position)) {
+                        cout << "Item at index " << position << " is equal to " << value << endl;
+                    } else {
+                        cout << "Item at index " << position << " is not equal to " << value << endl;
+                    }
+                } catch (const out_of_range& e) {
+                    cout << e.what() << endl;
+                }
+                break;
+            case 16:
+                cout << "Enter first element index to swap: ";
+                cin >> position;
+                cout << "Enter second element index to swap: ";
+                cin >> value;
+                try {
+                    list.swap(position, value);
+                    cout << "Elements swapped successfully" << endl;
+                } catch (const out_of_range& e) {
+                    cout << e.what() << endl;
+                }
+                break;
+            case 17:
                 cout << "Exiting program." << endl;
                 return 0;
             default:
