@@ -34,6 +34,32 @@ void bubble_sort(vector<T>&v){
         }
     }
 }
+// ====================   quick_sort() function  ================================
+template<class T>
+int partition(vector<T>&v,int low,int high){
+    if(type_by=="name"){
+        string pivot=v[low].get_name();
+    }
+    else{
+        double pivot=v[low].get_gpa();
+    }
+    int i=low,j;
+    for(j=low+1;j<=high;j++){
+        if(v[j]<v[low]){
+            i++;
+            swap(v[j],v[i]);}
+    }
+    swap(v[i],v[low]);
+    return i;
+}
+template<class T>
+void Quick_sort(vector<T>&v,int low,int high){
+    if(low<high){
+        int p=partition(v,low,high);
+        Quick_sort(v,low,p-1);
+        Quick_sort(v,p+1,high);
+    }
+}
 
 // ================================================================================
 class student{
@@ -106,26 +132,68 @@ int main(){
              p=0;
          }
     }
-    // ==================================
-    type_by="name";
-    bubble_sort<student>(container);
-    ofstream file;
-    file.open("result_by_name.txt",ios::out);
-    file<<"Algorithm : "<<"bubble sort\n";
-    file<<"running time : \n";
+    // ===================selection===============
+    type_by="gpa";
+    selection_sort<student>(container);
+    ofstream write_infile;
+    write_infile.open("result_by_gpa.txt",ios::app);
+    write_infile<<"Algorithm : "<<"Quick_sort\n";
+    write_infile<<"running time : \n";
     for(auto x:container){
-        file<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
+        write_infile<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
     }
 
-    type_by="gpa";
-    bubble_sort<student>(container);
-    ofstream file1;
-    file1.open("result_by_gpa.txt",ios::out);
-    file1<<"Algorithm : "<<"bubble sort\n";
-    file1<<"running time : \n";
+    type_by="name";
+    selection_sort<student>(container);
+    ofstream write_infile1;
+    write_infile1.open("result_by_name.txt",ios::app);
+    write_infile1<<"Algorithm : "<<"selection_sort\n";
+    write_infile1<<"running time : \n";
     for(auto x:container){
-        file1<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
+        write_infile1<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
     }
+    // =================== bubble===============
+    type_by="gpa";
+    selection_sort<student>(container);
+    ofstream write_infile2;
+    write_infile2.open("result_by_gpa.txt",ios::app);
+    write_infile2<<"Algorithm : "<<"bubble_sort\n";
+    write_infile2<<"running time : \n";
+    for(auto x:container){
+        write_infile2<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
+    }
+
+    type_by="name";
+    bubble_sort<student>(container);
+    ofstream write_infile3;
+    write_infile3.open("result_by_name.txt",ios::app);
+    write_infile3<<"Algorithm : "<<"bubble_sort\n";
+    write_infile3<<"running time : \n";
+    for(auto x:container){
+        write_infile3<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
+    }
+    // ===================quick===============
+    type_by="gpa";
+    Quick_sort<student>(container,0,container.size()-1);
+    ofstream write_infile4;
+    write_infile4.open("result_by_gpa.txt",ios::app);
+    write_infile4<<"Algorithm : "<<"Quick_sort\n";
+    write_infile4<<"running time : \n";
+    for(auto x:container){
+        write_infile4<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
+    }
+
+    type_by="name";
+    Quick_sort<student>(container,0,container.size()-1);
+    ofstream write_infile5;
+    write_infile5.open("result_by_name.txt",ios::app);
+    write_infile5<<"Algorithm : "<<"Quick_sort\n";
+    write_infile5<<"running time : \n";
+    for(auto x:container){
+        write_infile5<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
+    }
+
+
 
 }
 
