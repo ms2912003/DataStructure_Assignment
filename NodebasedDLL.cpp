@@ -236,7 +236,6 @@ public:
         for (int i = 0; i < secondItemIdx; i++) {
             secondItem = secondItem->next;
         }
-        // Swap the nodes without swapping their data
         if (firstItem->next == secondItem) {
             // If the nodes are adjacent
             firstItem->next = secondItem->next;
