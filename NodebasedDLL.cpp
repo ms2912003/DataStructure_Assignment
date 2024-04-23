@@ -223,33 +223,91 @@ public:
         if (firstItemIdx < 0 || firstItemIdx >= size || secondItemIdx < 0 || secondItemIdx >= size) {
             throw out_of_range("Invalid index");
         }
+        if (firstItemIdx == secondItemIdx) {
+            // No need to swap if indices are the same
+            return;
+        }
         Node<T>* firstItem = head;
+        Node<T>* secondItem = head;
+        // Find the nodes to swap
         for (int i = 0; i < firstItemIdx; i++) {
             firstItem = firstItem->next;
         }
-        Node<T>* secondItem = head;
         for (int i = 0; i < secondItemIdx; i++) {
             secondItem = secondItem->next;
         }
-        T temp = firstItem->data;
-        firstItem->data = secondItem->data;
-        secondItem->data = temp;
+        // Swap the nodes without swapping their data
+        if (firstItem->next == secondItem) {
+            // If the nodes are adjacent
+            firstItem->next = secondItem->next;
+            secondItem->prev = firstItem->prev;
+            if (secondItem->next) {
+                secondItem->next->prev = firstItem;
+            }
+            secondItem->next = firstItem;
+            firstItem->prev = secondItem;
+            if (secondItem->prev) {
+                secondItem->prev->next = secondItem;
+            } else {
+                // If the first node is the head
+                head = secondItem;
+            }
+        } else if (secondItem->next == firstItem) {
+            // If the nodes are adjacent in the opposite order
+            secondItem->next = firstItem->next;
+            firstItem->prev = secondItem->prev;
+            if (firstItem->next) {
+                firstItem->next->prev = secondItem;
+            }
+            firstItem->next = secondItem;
+            secondItem->prev = firstItem;
+            if (firstItem->prev) {
+                firstItem->prev->next = firstItem;
+            } else {
+                // If the second node is the head
+                head = firstItem;
+            }
+        } else {
+            // If the nodes are not adjacent
+            Node<T>* temp = firstItem->next;
+            firstItem->next = secondItem->next;
+            secondItem->next = temp;
+            if (firstItem->next) {
+                firstItem->next->prev = firstItem;
+            }
+            if (secondItem->next) {
+                secondItem->next->prev = secondItem;
+            }
+            temp = firstItem->prev;
+            firstItem->prev = secondItem->prev;
+            secondItem->prev = temp;
+            if (firstItem->prev) {
+                firstItem->prev->next = firstItem;
+            } else {
+                head = firstItem;
+            }
+            if (secondItem->prev) {
+                secondItem->prev->next = secondItem;
+            } else {
+                head = secondItem;
+            }
+        }
     }
 };
 
 int main() {
     DoublyLinkedList<int> list;
-    int choice, value, position;
+    int choice, value, position, firstItemIdx, secondItemIdx;
     while (true) {
         cout << "\nMenu:\n1. Insert element at end\n2. Delete element from end\n3. Insert element at beginning\n"
                 "4. Delete element from beginning\n5. Insert element at certain position\n6. Delete element from certain position\n"
                 "7. Print first element\n8. Print last\n9. Print list\n10. Clear list\n11. Print size of list\n"
                 "12. Retrieve element at index\n13. Replace element at index\n14. Check if element exists\n"
-                "15. Check if item at index is equal to element\n16. Swap two elements by index\n17. Exit Program.\nEnter your choice: " << endl;
+                "15. Check if item at index is equal to element\n16. Swap two elements by index\n17. Exit Program.\nEnter your choice: ";
         cin >> choice;
         switch (choice) {
             case 1:
-                cout << "Enter value to insert at end: " << endl;
+                cout << "Enter value to insert at end: ";
                 cin >> value;
                 list.push_back(value);
                 break;
@@ -262,7 +320,7 @@ int main() {
                 }
                 break;
             case 3:
-                cout << "Enter value to insert at beginning: " << endl;;
+                cout << "Enter value to insert at beginning: ";
                 cin >> value;
                 list.push_front(value);
                 break;
@@ -275,14 +333,14 @@ int main() {
                 }
                 break;
             case 5:
-                cout << "Enter value to insert: " << endl;;
+                cout << "Enter value to insert: ";
                 cin >> value;
-                cout << "Enter position to insert at: " << endl;;
+                cout << "Enter position to insert at: ";
                 cin >> position;
                 list.push_at_position(position, value);
                 break;
             case 6:
-                cout << "Enter position to delete from: " << endl;;
+                cout << "Enter position to delete from: ";
                 cin >> position;
                 list.delete_at_position(position);
                 break;
@@ -301,7 +359,7 @@ int main() {
                 }
                 break;
             case 9:
-                cout << "List elements: " << endl;;
+                cout << "List elements: ";
                 list.print();
                 break;
             case 10:
@@ -312,7 +370,7 @@ int main() {
                 cout << "Size of the list: " << list.Size() << endl;
                 break;
             case 12:
-                cout << "Enter index to retrieve from: " << endl;;
+                cout << "Enter index to retrieve from: ";
                 cin >> position;
                 try {
                     cout << "Element at index " << position << ": " << list.retrieveAt(position) << endl;
@@ -321,9 +379,9 @@ int main() {
                 }
                 break;
             case 13:
-                cout << "Enter index to replace: " << endl;;
+                cout << "Enter index to replace: ";
                 cin >> position;
-                cout << "Enter new value: " << endl;;
+                cout << "Enter new value: ";
                 cin >> value;
                 try {
                     list.replaceAt(value, position);
@@ -333,7 +391,7 @@ int main() {
                 }
                 break;
             case 14:
-                cout << "Enter element to check if it exists: " << endl;;
+                cout << "Enter element to check if it exists: ";
                 cin >> value;
                 if (list.isExist(value)) {
                     cout << "Element exists in the list" << endl;
@@ -342,9 +400,9 @@ int main() {
                 }
                 break;
             case 15:
-                cout << "Enter element to compare: " << endl;;
+                cout << "Enter element to compare: ";
                 cin >> value;
-                cout << "Enter index to compare with: " << endl;;
+                cout << "Enter index to compare with: ";
                 cin >> position;
                 try {
                     if (list.isItemAtEqual(value, position)) {
@@ -357,13 +415,13 @@ int main() {
                 }
                 break;
             case 16:
-                cout << "Enter first element index to swap: " << endl;;
-                cin >> position;
-                cout << "Enter second element index to swap: " << endl;;
-                cin >> value;
+                cout << "Enter first element index to swap: ";
+                cin >> firstItemIdx;
+                cout << "Enter second element index to swap: ";
+                cin >> secondItemIdx;
                 try {
-                    list.swap(position, value);
-                    cout << "Elements swapped successfully" << endl;
+                    list.swap(firstItemIdx, secondItemIdx);
+                    cout << "Nodes swapped successfully" << endl;
                 } catch (const out_of_range& e) {
                     cout << e.what() << endl;
                 }
@@ -377,3 +435,4 @@ int main() {
     }
     return 0;
 }
+
