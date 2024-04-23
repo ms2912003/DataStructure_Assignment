@@ -1,67 +1,119 @@
 #include <iostream>
 using namespace std;
-#include <list>
 
 template <class T>
-class ListbasedQueue{
-private: list <T> queue;
+struct Node {
+    T data;
+    Node<T>* next;
+
+    Node(T val) : data(val), next(nullptr) {}
+};
+
+template <class T>
+class ListbasedQueue {
+private:
+    Node<T>* front;
+    Node<T>* back;
+
 public:
-    bool isEmpty(){
-        return queue.empty();
+    ListbasedQueue() : front(nullptr), back(nullptr) {}
+
+    bool isEmpty() {
+        return front == nullptr;
     }
-    void enqueue(T n){
-            queue.push_back(n);
+
+    void enqueue(T n) {
+        Node<T>* newNode = new Node<T>(n);
+        if (isEmpty()) {
+            front = back = newNode;
+        } else {
+            back->next = newNode;
+            back = newNode;
+        }
     }
-    T dequeue(){
-        T tmp = queue.front();
-        queue.pop_front();
+
+    T dequeue() {
+        if (isEmpty()) {
+            cerr << "Queue is empty. Cannot dequeue." << endl;
+            exit(1);
+        }
+        T tmp = front->data;
+        Node<T>* tempNode = front;
+        front = front->next;
+        delete tempNode;
         return tmp;
     }
-    void clear(){
-        queue.clear();
+
+    void clear() {
+        while (!isEmpty()) {
+            dequeue();
+        }
     }
-    void first(){
-        cout << queue.front() << endl;
+
+    void first() {
+        if (isEmpty()) {
+            cerr << "Queue is empty." << endl;
+            return;
+        }
+        cout << front->data << endl;
     }
-    void queueSize(){
-        cout << queue.size() << endl;
+
+    void queueSize() {
+        int count = 0;
+        Node<T>* current = front;
+        while (current != nullptr) {
+            count++;
+            current = current->next;
+        }
+        cout << count << endl;
     }
-    void print () {
+
+    void print() {
         if (isEmpty()) {
             cout << "Queue is Empty !" << endl;
         } else {
-            for (auto i: queue) {
-                cout << i << endl;
+            Node<T>* current = front;
+            while (current != nullptr) {
+                cout << current->data << endl;
+                current = current->next;
             }
         }
     }
+
+    ~ListbasedQueue() {
+        clear();
+    }
 };
+
 int main() {
     ListbasedQueue<int> queue;
     int choice, value;
     while (true) {
         cout << "\nMenu:\n1. Enqueue\n2. Dequeue\n3. Print Queue\n"
-                "4. Clear queue\n5. Return size\n6. print first\n7. Exit\nEnter your choice: " << endl;
+                "4. Clear queue\n5. Return size\n6. Print first\n7. Exit\nEnter your choice: \n";
         cin >> choice;
         switch (choice) {
             case 1:
-                cout << "Enter value to enqueue: " << endl;
+                cout << "Enter value to enqueue: \n";
                 cin >> value;
                 queue.enqueue(value);
                 break;
             case 2:
-                cout << "Dequeued element: " << queue.dequeue() << endl;
+                if (!queue.isEmpty())
+                    cout << "Dequeued element:" << queue.dequeue() << endl;
+                else
+                    cout << "Queue is empty. Cannot dequeue.\n" << endl;
                 break;
             case 3:
-                cout << "Queue elements:" << endl;
+                cout << "Queue elements:\n" << endl;
                 queue.print();
                 break;
             case 4:
-                cout << "Queue is cleared" << endl;
+                cout << "Queue is cleared\n" << endl;
                 queue.clear();
                 break;
             case 5:
-                cout << "Queue Size is: ";
+                cout << "Queue Size is: \n";
                 queue.queueSize();
                 break;
             case 6:
@@ -69,10 +121,10 @@ int main() {
                 queue.first();
                 break;
             case 7:
-                cout << "Exiting program." << endl;
+                cout << "Exiting program.\n" << endl;
                 return 0;
             default:
-                cout << "Invalid Choice" << endl;
+                cout << "Invalid Choice\n" << endl;
         }
     }
     return 0;
