@@ -25,7 +25,9 @@ public:
     Node<T>* tail;
     int cnt;
     CLL(): first(nullptr), current(nullptr), cnt(0), tail(nullptr){}
-
+    ~CLL(){
+        clear();
+    }
     void insertAtHead(T data){
         Node<T> *node = new Node<T>;
         node->data=data;
@@ -210,6 +212,8 @@ public:
         }
         // Update the next and prev pointers for the adjacent nodes
         if(abs(firstIndex-secondIndex)>1){
+            Node<T> *previous = two->prev;
+//            cout<<previous->data<<endl<<endl;
             one->prev->next = two;
             two->next->prev = one;
             Node<T> *tempNext1 = one->next;
@@ -224,7 +228,35 @@ public:
             two->next = tempNext1;
 
             two->prev = tempPrev1;
+
+
+
             // Update the next and prev pointers for the swapped nodes
+            if(firstIndex==0||secondIndex==0){
+                if(firstIndex==cnt-1||secondIndex==cnt-1){
+                    first=two;
+                    two->prev=one;
+                    two->prev=tail;
+                    tail=one;
+                    previous->next=tail;
+//                    cout<<first->next->next->data<<" "<<tail->next->data<<endl<<endl;
+//                    cout<<tempNext1->data<<endl<<endl;
+//                    cout<<two->prev->prev->data<<endl<<endl;
+                    tail->next=two;
+                    first->prev=tail;
+                    return;
+                }
+                else{
+                    tempNext1->prev = two;
+                    tempPrev1->next = two;
+                    tempNext2->prev = one;
+                    tempPrev2->next = one;
+                    first=two;
+                    first->prev=tail;
+                    tail->next=first;
+                    return;
+                }
+            }
             tempNext1->prev = two;
             tempPrev1->next = two;
             tempNext2->prev = one;
@@ -244,12 +276,13 @@ public:
             tempNext2->prev=one;
             two->prev=tempPrev1;
             one->prev=two;
+            if(firstIndex==0||secondIndex==0){
+                first=two;
+                first->next=one;
+                first->prev=tail;
+                tail->next=first;
+            }
         }
-
-
-
-
-
     }
     bool isEmpty(){
         if(cnt){
@@ -273,7 +306,7 @@ public:
     }
     void print(){
         current = first;
-        for(int i=0;i<cnt*2;++i){
+        for(int i=0;i<cnt;++i){
             cout<<current->data<<endl;
             current=current->next;
         }
@@ -291,15 +324,36 @@ int main(){
     ll.insertAtTail(6);
     ll.insertAtTail(7);
     ll.insertAtTail(8);
-    ll.swap(0,1);
-//    ll.insertAt(100,0);
-//    ll.insertAt(200,9);
-//    ll.insertAt(300,3);
-//    ll.insertAt(300,100);
-//    ll.removeAtHead();
-//    ll.removeAtTail();
-//    ll.removeAt(5);
+    ll.swap(0,3);
+    ll.swap(0,7);
+    ll.swap(0,5);
+    ll.insertAt(100,0);
+    ll.insertAt(200,9);
+    ll.removeAtHead();
+    ll.removeAtTail();
+    ll.removeAt(5);
+    if(ll.isEmpty()){
+        cout<<"List is empty\n";
+    }
+    else{
+        cout<<"List is not empty\n";
+    }
+    cout<<"Size of the list: "<<ll.size()<<"\n";
+    cout<<"The fifth element of the list: "<<ll.retrieveAt(4)<<"\n";
+    ll.replaceAt(40,3);
+    if(ll.isExist(8)){
+        cout<<"Found the element\n";
+    }
+    else{
+        cout<<"Element not found\n";
+    }
+    if(ll.isItemAtEqual(7,3)){
+        cout<<"Item is equal\n";
+    }
+    else{
+        cout<<"Item is not equal\n";
+    }
     ll.print();
-
+    ll.clear();
     return 0;
 }
