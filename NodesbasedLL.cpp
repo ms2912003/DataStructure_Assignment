@@ -48,24 +48,24 @@ public:
         if(index<linkedListSize()&&index>=0){
             Node<T>* new_node=new Node<T>();
             new_node->data=element;
-             if(index==0){
-                 new_node->next=head;
-                 head=new_node;
-             }
-             else {
+            if(index==0){
+                new_node->next=head;
+                head=new_node;
+            }
+            else {
 
-                 Node<T>* temp=head;
-                 int i=0;
-                 while(temp!=NULL){
-                     if(i==index-1){//before required index
-                         new_node->next=temp->next;
-                         temp->next=new_node;
-                     }
-                     temp=temp->next;
-                     i++;// sorry I miss it
-                 }
+                Node<T>* temp=head;
+                int i=0;
+                while(temp!=NULL){
+                    if(i==index-1){//before required index
+                        new_node->next=temp->next;
+                        temp->next=new_node;
+                    }
+                    temp=temp->next;
+                    i++;// sorry I miss it
+                }
 
-             }
+            }
 
         }
         else{
@@ -76,7 +76,10 @@ public:
     //==========================================================================================
     void removeAtHead (){//✔
         Node<T>* del_ptr=head;
-        if(linkedListSize()==1){
+        if(head==NULL){
+            cout<<"INVALID\n";
+        }
+        else if(linkedListSize()==1){
             delete del_ptr;
             head=NULL;
             last=NULL;
@@ -89,46 +92,49 @@ public:
     //==========================================================================================
     void removeAtTail (){//✔
         Node<T>* del_ptr=last;
-        if(linkedListSize()==1){
+        if(head==NULL){
+            cout<<"INVALID\n";
+        }
+        else if(linkedListSize()==1){
             delete del_ptr;
             head=NULL;
             last=NULL;
         }
         else{
-             Node<T>* temp=head;
-             while(temp->next!=last){//to be out when it equals before last
-                 temp=temp->next;
-             }
-             last=temp;
-             temp->next=NULL;
-             delete del_ptr;
+            Node<T>* temp=head;
+            while(temp->next!=last){//to be out when it equals before last
+                temp=temp->next;
+            }
+            last=temp;
+            temp->next=NULL;
+            delete del_ptr;
         }
     }
     //==========================================================================================
     void removeAt (int index){ //✔
         if(index<linkedListSize()&&index>=0){
             Node<T>* del_ptr=head;
-             if(index==0){
-                  del_ptr=head;
-                 head=head->next;
-                 delete del_ptr;
+            if(index==0){
+                del_ptr=head;
+                head=head->next;
+                delete del_ptr;
 
-             }
-             else{
-                 Node<T>* temp=head;
-                 int i=0;
+            }
+            else{
+                Node<T>* temp=head;
+                int i=0;
 
-                 while(temp!=NULL){
-                     if(i==index-1){
+                while(temp!=NULL){
+                    if(i==index-1){
                         del_ptr=temp->next;
                         temp->next=temp->next->next;
                         delete del_ptr;
-                     }
-                     i++;
-                     temp=temp->next;
-                 }
+                    }
+                    i++;
+                    temp=temp->next;
+                }
 
-             }
+            }
         }
         else{
             cout<<"THERE IS NO SUCH INDEX\n";
@@ -168,8 +174,8 @@ public:
                     temp->data=newElement;
                     break;
                 }
-                    temp=temp->next;
-                    i++;
+                temp=temp->next;
+                i++;
             }
         }
         else{
@@ -182,7 +188,7 @@ public:
         bool found=false;
         while(temp!=NULL){
             if(temp->data==element){
-               found=true;}
+                found=true;}
             temp=temp->next;
         }
         return found;
@@ -195,10 +201,10 @@ public:
             bool equal=false;
             while(temp!=NULL){
                 if(i==index&&temp->data==element){
-                     equal=true;
+                    equal=true;
                 }
-                    temp=temp->next;
-                    i++;
+                temp=temp->next;
+                i++;
             }
             return equal;
         }
@@ -218,19 +224,19 @@ public:
             int i=0;
             while(temp!=NULL){
                 if(i==firstItemIdx-1&&i!=-1){
-                     prev_firstItem=temp;
-                     firstItem=temp->next;
+                    prev_firstItem=temp;
+                    firstItem=temp->next;
                 }
                 if(i==secondItemIdx-1&&i!=-1){
-                     prev_secondItem=temp;
-                     secondItem=temp->next;
+                    prev_secondItem=temp;
+                    secondItem=temp->next;
                 }
                 temp=temp->next;
                 i++;
             }
             //هنا بشوف مين قبليا يشاور عليا===========
             if(prev_firstItem!=NULL){
-                 prev_firstItem->next=secondItem;
+                prev_firstItem->next=secondItem;
             }
             else{
                 head=secondItem;
