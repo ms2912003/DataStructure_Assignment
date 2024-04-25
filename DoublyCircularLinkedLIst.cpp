@@ -208,37 +208,45 @@ public:
         for (int i = 0; i < max(firstIndex, secondIndex); ++i) {
             two = two->next;
         }
-
-//        cout<<one->data<<endl;
-//        cout<<two->data<<endl;
         // Update the next and prev pointers for the adjacent nodes
-        one->prev->next = two;
-        two->next->prev = one;
+        if(abs(firstIndex-secondIndex)>1){
+            one->prev->next = two;
+            two->next->prev = one;
+            Node<T> *tempNext1 = one->next;
+            Node<T> *tempPrev1 = one->prev;
+            Node<T> *tempNext2 = two->next;
+            Node<T> *tempPrev2 = two->prev;
 
-        Node<T> *tempNext1 = one->next;
-        Node<T> *tempPrev1 = one->prev;
-        Node<T> *tempNext2 = two->next;
-        Node<T> *tempPrev2 = two->prev;
+            one->next = tempNext2;
+            one->prev = tempPrev2;
 
-        one->next = tempNext2;
-        one->prev = tempPrev2;
 
-        if(abs(firstIndex-secondIndex)==1){
-            two->next=tempPrev2;
-            one->prev=two;
-//            one->next=tempNext2;
+            two->next = tempNext1;
+
+            two->prev = tempPrev1;
+            // Update the next and prev pointers for the swapped nodes
+            tempNext1->prev = two;
+            tempPrev1->next = two;
+            tempNext2->prev = one;
+            tempPrev2->next = one;
         }
         else{
-            two->next = tempNext1;
+            one->prev->next = two;
+            two->next->prev = one;
+            Node<T> *tempNext1 = one->next;
+            Node<T> *tempPrev1 = one->prev;
+            Node<T> *tempNext2 = two->next;
+            Node<T> *tempPrev2 = two->prev;
+
+            tempPrev1->next=two;
+            two->next=one;
+            one->next=tempNext2;
+            tempNext2->prev=one;
+            two->prev=tempPrev1;
+            one->prev=two;
         }
 
-        two->prev = tempPrev1;
 
-        // Update the next and prev pointers for the swapped nodes
-        tempNext1->prev = two;
-        tempPrev1->next = two;
-        tempNext2->prev = one;
-        tempPrev2->next = one;
 
 
 
@@ -283,7 +291,7 @@ int main(){
     ll.insertAtTail(6);
     ll.insertAtTail(7);
     ll.insertAtTail(8);
-    ll.swap(5,6);
+    ll.swap(0,1);
 //    ll.insertAt(100,0);
 //    ll.insertAt(200,9);
 //    ll.insertAt(300,3);
@@ -292,5 +300,6 @@ int main(){
 //    ll.removeAtTail();
 //    ll.removeAt(5);
     ll.print();
+
     return 0;
 }
