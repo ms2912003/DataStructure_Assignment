@@ -24,16 +24,22 @@ public:
     }
 
     void push_back(T val) {
+        if(isFull()){
+            expandCapacity();
+        }
         if (isEmpty()) {
             first = last = 0;
-        }
-        else {
+        } else {
             last = (last + 1) % capacity;
         }
         arr[last] = val;
         size++;
     }
+
     void push_front(T val) {
+        if(isFull()){
+            expandCapacity();
+        }
         if (isEmpty()) {
             first = last = 0;
         } else {
@@ -44,9 +50,13 @@ public:
     }
 
     void push_at_position(int position, T val) {
+
         if (position < 0 || position > size) {
             cout << "Invalid position" << endl;
             return;
+        }
+        if(isFull()){
+            expandCapacity();
         }
         if (position == 0) {
             push_front(val);
@@ -191,6 +201,21 @@ public:
         T temp = arr[(first + firstItemIdx) % capacity];
         arr[(first + firstItemIdx) % capacity] = arr[(first + secondItemIdx) % capacity];
         arr[(first + secondItemIdx) % capacity] = temp;
+    }
+    void expandCapacity() {
+        int newCapacity = capacity * 2;
+        T* newArr = new T[newCapacity];
+
+        for (int i = 0; i < size; ++i) {
+            newArr[i] = arr[(first + i) % capacity];
+        }
+
+        capacity = newCapacity;
+        first = 0;
+        last = size - 1;
+
+        delete[] arr;
+        arr = newArr;
     }
 };
 
