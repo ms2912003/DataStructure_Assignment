@@ -209,6 +209,8 @@ public:
             two = two->next;
         }
 
+//        cout<<one->data<<endl;
+//        cout<<two->data<<endl;
         // Update the next and prev pointers for the adjacent nodes
         one->prev->next = two;
         two->next->prev = one;
@@ -220,7 +222,16 @@ public:
 
         one->next = tempNext2;
         one->prev = tempPrev2;
-        two->next = tempNext1;
+
+        if(abs(firstIndex-secondIndex)==1){
+            two->next=tempPrev2;
+            one->prev=two;
+//            one->next=tempNext2;
+        }
+        else{
+            two->next = tempNext1;
+        }
+
         two->prev = tempPrev1;
 
         // Update the next and prev pointers for the swapped nodes
@@ -272,7 +283,7 @@ int main(){
     ll.insertAtTail(6);
     ll.insertAtTail(7);
     ll.insertAtTail(8);
-    ll.swap(0,7);
+    ll.swap(5,6);
 //    ll.insertAt(100,0);
 //    ll.insertAt(200,9);
 //    ll.insertAt(300,3);
