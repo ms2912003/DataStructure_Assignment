@@ -2,6 +2,72 @@
 using namespace std;
 string type_by;
 int num_comp=0;
+//=====================
+class student{
+public:
+    string name;
+    string id;
+    double gpa;
+    student(string name="",string id="",double gpa=0){
+        this->id=id;
+        this->name=name;
+        this->gpa=gpa;
+    }
+    string get_id(){
+        return id;
+    };
+    string get_name(){
+        return name;
+    };
+    double get_gpa(){
+        return gpa;
+    };
+    bool operator<(student x){
+        if(type_by=="name"){
+            if(name<x.name)
+                return 1;
+            else
+                return 0;
+        }
+        else{
+            if(gpa<x.gpa)
+                return 1;
+            else
+                return 0;
+        }
+
+    }
+    bool operator>(student x){
+        if(type_by=="name"){
+            if(name>x.name)
+                return 1;
+            else
+                return 0;
+        }
+        else{
+            if(gpa>x.gpa)
+                return 1;
+            else
+                return 0;
+        }
+
+    }
+    bool operator<=(student x){
+        if(type_by=="name"){
+            if(name<=x.name)
+                return 1;
+            else
+                return 0;
+        }
+        else{
+            if(gpa<=x.gpa)
+                return 1;
+            else
+                return 0;
+        }
+
+    }
+};
 // ==================== isinteger() function ================================
 /*help me in getting elements from file and setting them in student objects*/
 bool isinteger(string s){
@@ -140,73 +206,45 @@ void merge_sort(vector<T>&v,int left,int right){
 }
 
 // ====================   count_sort() function  ================================
-
+void count_sort(vector<student>&v){
+    //take big number in array
+    int k=int(v[0].gpa);
+    int n=v.size();
+    for(int i=1;i<n;i++){
+        if(int(v[i].gpa)>k)
+            num_comp++;
+            k=int(v[i].gpa);
+    }
+    //intialize count vector
+    int count_arr[k+1];
+    for(int i=0;i<=k;i++){
+        num_comp++;
+        count_arr[int(v[i].gpa)]=0;
+    }
+    //count how many times each item occur
+    for(int i=0;i<n;i++){
+        num_comp++;
+        count_arr[int(v[i].gpa)]++;
+    }
+    //cumulative sum of count arr
+    for(int i=1;i<=k;i++){
+        num_comp++;
+        count_arr[i]+=count_arr[i-1];
+    }
+    // to make sort
+    int B[n];
+    for(int i=n-1;i>=0;i--){
+        num_comp++;
+        B[count_arr[int(v[i].gpa)]-1]=int(v[i].gpa);
+        count_arr[int(v[i].gpa)]--;
+    }
+    //return sorted array from outer array B to origin
+    for(int i=0;i<n;i++){
+        v[i].gpa=B[i];
+    }
+}
 // ================================================================================
-class student{
-    string name;
-    string id;
-    double gpa;
-public:
-    student(string name="",string id="",double gpa=0){
-        this->id=id;
-        this->name=name;
-        this->gpa=gpa;
-    }
-    string get_id(){
-        return id;
-    };
-    string get_name(){
-        return name;
-    };
-    double get_gpa(){
-        return gpa;
-    };
-    bool operator<(student x){
-        if(type_by=="name"){
-            if(name<x.name)
-                return 1;
-            else
-                return 0;
-        }
-        else{
-            if(gpa<x.gpa)
-                return 1;
-            else
-                return 0;
-        }
 
-    }
-    bool operator>(student x){
-        if(type_by=="name"){
-            if(name>x.name)
-                return 1;
-            else
-                return 0;
-        }
-        else{
-            if(gpa>x.gpa)
-                return 1;
-            else
-                return 0;
-        }
-
-    }
-    bool operator<=(student x){
-        if(type_by=="name"){
-            if(name<=x.name)
-                return 1;
-            else
-                return 0;
-        }
-        else{
-            if(gpa<=x.gpa)
-                return 1;
-            else
-                return 0;
-        }
-
-    }
-};
 int main(){
     vector<student>container;
     vector<string>v;
@@ -222,25 +260,25 @@ int main(){
     string name="",id,gpa;
     bool p=0;
     for(auto item:v){
-         if(!isinteger(item)){
-             name+=item+" ";
-         }
-         else if(p==0){
-             id=item;
-             p=1;
-         }
-         else{
-             gpa=item;
-             int si=name.size();
-             string ss="";
-             for(int i=0;i<si-1;i++){
-                 ss+=name[i];
-             }
-             student obj(ss,id,stod(gpa));
-             container.push_back(obj);
-             name="";
-             p=0;
-         }
+        if(!isinteger(item)){
+            name+=item+" ";
+        }
+        else if(p==0){
+            id=item;
+            p=1;
+        }
+        else{
+            gpa=item;
+            int si=name.size();
+            string ss="";
+            for(int i=0;i<si-1;i++){
+                ss+=name[i];
+            }
+            student obj(ss,id,stod(gpa));
+            container.push_back(obj);
+            name="";
+            p=0;
+        }
     }
     // ===================selection===============
     type_by="gpa";
@@ -333,7 +371,7 @@ int main(){
     for(auto x:container){
         write_infile5<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
     }
-   // ===================insertion===============
+    // ===================insertion===============
     type_by="gpa";
     start = std::chrono::high_resolution_clock::now();
     insertion_sort<student>(container);
@@ -363,7 +401,7 @@ int main(){
     for(auto x:container){
         write_infile7<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
     }
-   // ===================shell===============
+    // ===================shell===============
     type_by="gpa";
     start = std::chrono::high_resolution_clock::now();
     shell_sort<student>(container);
@@ -423,7 +461,29 @@ int main(){
     for(auto x:container){
         write_infile11<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
     }
+
+// ===================count===============
+    type_by="gpa";
+    start = std::chrono::high_resolution_clock::now();
+    count_sort(container);
+    end = std::chrono::high_resolution_clock::now();
+    duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+    ofstream write_infile12;
+    write_infile12.open("result_by_gpa.txt",ios::app);
+    write_infile12<<"Algorithm : "<<"count_sort\n";
+    write_infile12<< "Running time: " << duration/ 1000000.0 << " milliseconds\n";
+    write_infile12<< "Number of comparisons: " << num_comp << "\n";
+    num_comp=0;
+    for(auto x:container){
+        write_infile12<<x.get_name()<<"\n"<<x.get_id()<<"\n"<<x.get_gpa()<<"\n \n";
+    }
 }
+
+
+
+
+
+
 
 
 
