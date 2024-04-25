@@ -192,72 +192,69 @@ public:
             return;
         }
         //before first, first, before second, second
-        Node<T> *bf= nullptr;
-        Node<T> *f=first;
-        Node<T> *bs;
-        Node<T> *s=first;
+        Node<T> *bf = new Node<T>;
+        Node<T> *f = new Node<T>;
+        Node<T> *af = new Node<T>;
+        Node<T> *bs = new Node<T>;
+        Node<T> *s = new Node<T>;
+        Node<T> *as = new Node<T>;
 
-        Node<T> *temp2;
+        Node<T> *temp = new Node<T>;
 
-        if(secondIndex-firstIndex>1){
-            for(int i=0;i<firstIndex;i++) {
-                bf = f;
-                f = f->next;
-            }
-            for(int i=0;i<secondIndex;i++) {
-                bs = s;
-                s = s->next;
-            }
-            temp=s->next;
-            bf->next=s;
-            s->next=f->next;
-            bs->next=f;
-            f->next=temp;
+        bf = first;
+        f = first;
+        af = first;
+        bs = first;
+        s = first;
+        as = first;
+        for (int i = 0; i < min(firstIndex,secondIndex); i++) {
+            bf = f;
+            f = f->next;
         }
-        else if(firstIndex==0){
-            for(int i=0;i<secondIndex;i++) {
-                bs = s;
-                s = s->next;
+        for (int i = 0; i < max(firstIndex, secondIndex); i++) {
+            bs = s;
+            s = s->next;
+        }
+        af = f->next;
+        as = s->next;
+        if(abs(secondIndex-firstIndex)>1) {
+
+            if(firstIndex==0||secondIndex==0){
+                if(firstIndex==cnt-1||secondIndex==cnt-1){
+                    bs->next=f;
+                    f->next=s;
+                    s->next=af;
+                    first=s;
+                    last=f;
+                    last->next=first;
+                }
+                else{
+                    bs->next=f;
+                    bf->next=s;
+                    s->next=af;
+                    f->next=as;
+                    first=s;
+                    last->next=first;
+                }
             }
-            temp=s->next;
-            f=first;
-            first=s;
-            s->next=bs;
-            bs->next=f;
-            f->next=temp;
-//            first=s;
+            else{
+                bf->next=s;
+                s->next=af;
+                bs->next=f;
+                f->next=as;
+            }
+
         }
         else{
 
-        }
-        if(secondIndex==cnt-1){
-            f->next=first;\
+            bf->next=s;
+            s->next=f;
+            f->next=as;
+            if(firstIndex==0||secondIndex==0){
+                first=s;
+            }
 
         }
-
-
-
-
-
-
-
-
-        //if adjacent
-//        if(secondIndex-firstIndex==1){
-//            temp=f->next;
-//            f->next=s->next;
-//            s->next=temp;
-//            temp=f;
-//            f=s;
-//            s=temp;
-//            temp=bf->next;
-//            bf->next=s;
-//            bs->next=temp;
-//        }
-
-
-
-
     }
     bool isEmpty(){
         if(cnt){
@@ -281,34 +278,53 @@ public:
     }
     void print(){
         current=first;
-        for(int i=0;i<cnt;++i){
+        for(int i=0;i<cnt*2;++i){
             cout<<current->data<<"\n";
             current=current->next;
         }
     }
 };
 
-//int main(){
-//    CLL<int> c;
-//    c.insertAtTail(5);
-//    c.insertAtTail(6);
-//    c.insertAtTail(7);
-//    c.insertAtTail(8);
-//    c.insertAtTail(9);
-//    c.insertAtTail(10);
-//    c.insertAtHead(4);
-//    c.insertAtHead(3);
-//    c.insertAtHead(2);
-//    c.insertAtHead(1);
-//    c.removeAtHead();
-//    c.removeAtHead();
-//    c.removeAtTail();
-//    c.removeAt(5);
-//    cout<<c.size()<<endl;
-//    c.swap(0,2);
-//    c.print();
-//    c.clear();
-//    c.print();
-//    cout<<c.retrieveAt(3);
-//    return 0;
-//}
+int main(){
+    CLL<int> ll;
+    ll.insertAtHead(4);
+    ll.insertAtHead(3);
+    ll.insertAtHead(2);
+    ll.insertAtHead(1);
+    ll.insertAtTail(5);
+    ll.insertAtTail(6);
+    ll.insertAtTail(7);
+    ll.insertAtTail(8);
+    ll.swap(0,3);
+    ll.swap(0,7);
+    ll.swap(0,5);
+    ll.insertAt(100,0);
+    ll.insertAt(200,9);
+    ll.removeAtHead();
+    ll.removeAtTail();
+    ll.removeAt(5);
+    if(ll.isEmpty()){
+        cout<<"List is empty\n";
+    }
+    else{
+        cout<<"List is not empty\n";
+    }
+    cout<<"Size of the list: "<<ll.size()<<"\n";
+    cout<<"The fifth element of the list: "<<ll.retrieveAt(4)<<"\n";
+    ll.replaceAt(40,3);
+    if(ll.isExist(8)){
+        cout<<"Found the element\n";
+    }
+    else{
+        cout<<"Element not found\n";
+    }
+    if(ll.isItemAtEqual(7,3)){
+        cout<<"Item is equal\n";
+    }
+    else{
+        cout<<"Item is not equal\n";
+    }
+    ll.print();
+    ll.clear();
+    return 0;
+}
