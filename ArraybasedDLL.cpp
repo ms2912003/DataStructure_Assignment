@@ -24,10 +24,6 @@ public:
     }
 
     void push_back(T val) {
-        if (isFull()) {
-            cout << "List is full" << endl;
-            return;
-        }
         if (isEmpty()) {
             first = last = 0;
         }
@@ -37,12 +33,7 @@ public:
         arr[last] = val;
         size++;
     }
-
     void push_front(T val) {
-        if (isFull()) {
-            cout << "List is full" << endl;
-            return;
-        }
         if (isEmpty()) {
             first = last = 0;
         } else {
@@ -53,10 +44,6 @@ public:
     }
 
     void push_at_position(int position, T val) {
-        if (isFull()) {
-            cout << "List is full" << endl;
-            return;
-        }
         if (position < 0 || position > size) {
             cout << "Invalid position" << endl;
             return;
