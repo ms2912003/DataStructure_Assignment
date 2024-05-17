@@ -39,6 +39,22 @@ public:
         }
 
     }
+    bool operator<(const AVLNode& i)
+    {
+        if(type==1){
+            if((key)<(i.key))
+                return 1;
+            else
+                return 0;
+        }
+        else{
+            if((name)<(i.name))
+                return 1;
+            else
+                return 0;
+        }
+
+    }
     bool operator!=(const AVLNode& i)
     {
         if(type==1){
@@ -58,7 +74,6 @@ public:
 
 
 };
-
 
 class AVL {
 public:
@@ -346,59 +361,61 @@ public:
     }
     //____________________________________________
 };
+void Mini_MENU_AVL(){
+    AVL itemPrice;
+    AVL itemName;
+    cout<<"===== MENU ===== :\n";
+    cout<<" [ 1. Add item data ]                                         [ press 1 ]   \n";
+    cout<<" [ 2. Remove item data ]                                      [ press 2 ]   \n";
+    cout<<" [ 3. Display the item data normally ]                        [ press 3 ]  \n";
+    cout<<" [ 4. Display all the items sorted by their name ascending]   [ press 4 ]  \n";
+    cout<<" [ 5. Display all the items sorted by their name descending]  [ press 5 ]  \n";
+    cout<<" [ 6. Display all the items sorted by their prices ascending] [ press 6 ]  \n";
+    cout<<" [ 7. Display all the items sorted by their prices descending][ press 7 ]  \n";
+    cout<<" [ 8. stop ]                                                  [ press 8 ]   \n";
+    int choice;
 
-int main() {
-    type=1;
-    AVL avl;
-    avl.Add_item("chocolate milk","drink",10);//[1]add
-    avl.Add_item("bananas","fruit",75);
-    avl.Add_item("pepsi","drink",20);
-    avl.Add_item("cheddar cheese","dairy",49);
-    avl.Add_item("tuna","meat",90);
-    avl.Add_item("fanta orange","drink",20);
-    avl.Add_item("yought","dairy",13);
-    avl.Add_item("mint gum","candy",2);
-    avl.Add_item("water","drink",9);
-    avl.Add_item("apples","fruit",66);
-    avl.Add_item("beef","meat",284);
-    avl.Add_item("cheese cake","dessert",68);
-    //____________________
-    cout<<"price in ascending order \n";
-    avl.Ascending(avl.root);//[4] display with price in ascending
-    //____________________
-    cout<<"\n\n";
-    avl.remove_item(avl.root,"cheese cake","dessert",68);//[2] remove
-    avl.remove_item(avl.root,"beef","meat",284);
-    //____________________
-    cout<<"price in descending order \n";
-    avl.Descending(avl.root); //[5] display with price in descending
-    //____________________
-    cout<<"price level by level \n";
-    avl.Display_level_by_level(); // [3] display level by level
-    //____________________________________________________
-    cout<<"\n\n";
-    type=0;
-    AVL avl1;
-    avl1.Add_item("chocolate milk","drink",10);
-    avl1.Add_item("bananas","fruit",75);
-    avl1.Add_item("pepsi","drink",20);
-    avl1.Add_item("cheddar cheese","dairy",49);
-    avl1.Add_item("tuna","meat",90);
-    avl1.Add_item("fanta orange","drink",20);
-    avl1.Add_item("yought","dairy",13);
-    avl1.Add_item("mint gum","candy",2);
-    avl1.Add_item("water","drink",9);
-    avl1.Add_item("apples","fruit",66);
-    avl1.Add_item("beef","meat",284);
-    avl1.Add_item("cheese cake","dessert",68);
-    //____________________
-    cout<<"name in ascending order \n";
-    avl1.Ascending(avl1.root);//[6] display with name in ascending
-    cout<<"\n\n";
-    //____________________
-    cout<<"name in descending order \n";
-    avl1.Descending(avl1.root); //[7] display with name in descending
-    //____________________________
-    avl1.Display_level_by_level();
+    while(cin>>choice) {
+        if (choice == 1) {
+            cout<<"Enter name ";string n;cin>>n;
+            cout<<"Enter category ";string c;cin>>c;
+            cout<<"Enter price ";int p;cin>>p;
+            type=1;
+            itemPrice.Add_item(n,c,p);
+            type=0;
+            itemName.Add_item(n,c,p);
+        } else if (choice == 2) {
+            cout<<"Enter name ";string n;cin>>n;
+            cout<<"Enter category ";string c;cin>>c;
+            cout<<"Enter price ";int p;cin>>p;
+            type=1;
+            itemPrice.remove_item(itemPrice.root,n,c,p);
+            type=0;
+            itemName.remove_item(itemName.root,n,c,p);
+        } else if (choice == 3) {
+            itemPrice.Display_level_by_level();
+        } else if (choice == 4) {
+            type=0;
+            itemName.Ascending(itemName.root);
+        } else if (choice == 5) {
+            type=0;
+            itemName.Descending(itemName.root);
+        } else if (choice == 6) {
+            type=1;
+            itemPrice.Ascending(itemPrice.root);
+        } else if (choice == 7) {
+            type=1;
+            itemPrice.Descending(itemPrice.root);
+        } else if (choice == 8){
+            break;
+        }
+        else{
+            cout<<"There is no such nem , plz enter another\n";
+        }
+    }
+    
 }
 
+int main() {
+    Mini_MENU_AVL();
+}
